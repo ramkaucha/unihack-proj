@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 import { ModeToggle } from "./NodeToggle";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import ThemeAwareImage from "./ThemeAwareImage";
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -42,7 +43,7 @@ export default function Navigation() {
         <div className="flex justify-between items-center">
           <div className="flex items-center justify-center">
             <Link href="/" className="font-bold text-xl dark:text-white text-black mt-3">
-              <img src="/logo.png" alt="logo" className="h-10"/>
+              <ThemeAwareImage lightSrc="/logo-light.png" darkSrc="/logo.png" alt="Logo" height={80} width={100} />
             </Link>
           </div>
           <nav className="flex space-x-6 items-center mt-3">
