@@ -3,7 +3,7 @@ from flask import jsonify
 from backend import properties
 from models import db
 from models.user import User
-from utils.PassUtil import passUtil
+from backend.app.utils.pass_util import passUtil
 import jwt
 
 JWT_KEY = properties.jwt_secret_key
@@ -100,6 +100,15 @@ class UserService:
         except Exception as e:
             db.session.rollback()
             return jsonify({"message": "delete failed", "error": str(e)}), 500
+        
+    def queryNameById(id:int):
+        if id == 0 or id is None:
+            return jsonify({"message": "invalid id"}), 500
+        user = User.query.filter_by(userId= id).first()
+        if user:
+            return jsonify({"user name": user.userName}),200
+        else:
+            return jsonify({"message": "user does not exist"}),404
         
 
         
