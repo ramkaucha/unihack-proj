@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import TransitionProvider from "../components/TransitionProvider";
+import Navigation from '../components/navigation'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,9 +22,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full`}
       >
-        {children}
+        <Navigation />
+        <TransitionProvider>
+          <main className='pt-16'>
+            {children}
+          </main>
+        </TransitionProvider>
       </body>
     </html>
   );
