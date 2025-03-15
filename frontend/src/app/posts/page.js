@@ -155,7 +155,7 @@ export default function Posts() {
         {posts.map((post) => (
           <div 
             key={post.title} 
-            className='flex flex-col md:flex-row border-1 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300'
+            className='flex flex-col md:flex-row border-1 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer'
           >
             <div className='mr-4 mb-3 md:mb-0'>
               <img
@@ -184,7 +184,7 @@ export default function Posts() {
       {/* Sidebar */}
       <div className='w-full md:w-1/4'>
         <div className='rounded-lg shadow-md p-4 sticky top-6'>
-          <h1 className='font-bold text-xl text-gray-800 dark:text-gray-100 mb-4 border-b border-gray-200 pb-2'>Top Posts</h1>
+          <h1 className='font-bold text-xl text-gray-800 dark:text-gray-100 mb-4 border-b border-gray-200 pb-2'>Top Developers</h1>
           <div className='space-y-2'>
             {posts.map((post) => (
               <a 

@@ -25,10 +25,10 @@ const geistMono = Geist_Mono({
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
-  
+
   // Check if current path is homepage
   const isNonScrollable = pathname === '/' || pathname === '/login' || pathname === '/register';
-  
+
   // Apply no-scroll class only to homepage
   const bodyClass = `${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased w-full ${isNonScrollable ? 'overflow-hidden h-screen' : ''}`;
 

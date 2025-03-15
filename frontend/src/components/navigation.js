@@ -41,8 +41,8 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 mb-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center justify-center">
-            <Link href="/" className="font-bold text-xl dark:text-white text-black">
-              Solve.
+            <Link href="/" className="font-bold text-xl dark:text-white text-black mt-3">
+              <img src="/logo.png" alt="logo" className="h-10"/>
             </Link>
           </div>
           <nav className="flex space-x-6 items-center mt-3">
