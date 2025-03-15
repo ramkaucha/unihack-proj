@@ -1,10 +1,11 @@
 from flask import jsonify, request
-from models import db, Post
+from ..models import db, Post
+from sqlalchemy.sql import func
 
 
 # get all posts
 def get_posts():
-    posts = Post.query.all()  # 获取所有帖子
+    posts = Post.query.filter_by(is_archived=False).all()
     posts_data = [
         {
             "post_id": post.post_id,
@@ -17,6 +18,13 @@ def get_posts():
         for post in posts
     ]
     return jsonify(posts_data)
+
+
+# get all posts sorted by popularity
+def get_posts_sorted_by_popularity():
+    posts = Post.query.order_by(func.json_array_length(Post.likes).desc()).all()
+    return jsonify(posts)
+
 
 # get post by id
 def get_post(post_id):
@@ -56,7 +64,18 @@ def update_post(post_id, request):
     post.is_archived = data.get("is_archived", post.is_archived)
 
     db.session.commit()
-    return jsonify({"message": "Post updated successfully!"})
+    return jsonify({"message": "Post updated successfully!"}), 200
+
+
+# archive post
+def archive_post(post_id):
+    post = Post.query.get(post_id)
+    if post:
+        post.is_archived = True
+        db.session.commit()
+        return jsonify({"message": "Post archived successfully!"}), 200
+    else:
+        return jsonify({"message": "Post not found!"}), 404
 
 
 # delete post
@@ -64,4 +83,4 @@ def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
     db.session.delete(post)
     db.session.commit()
-    return jsonify({"message": "Post deleted successfully!"})
+    return jsonify({"message": "Post deleted successfully!"}), 200
