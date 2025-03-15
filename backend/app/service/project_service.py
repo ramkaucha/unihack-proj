@@ -1,23 +1,25 @@
 from datetime import datetime
+
+from . import PostService
 from ..model import db, Project
 from ..service import UserService
+from ..util import SchemaUtil
 
 
 class ProjectService:
 
     # create project
     @staticmethod
-    def create_project_s(title, description, owner_id, users, post_id):
-        project = Project(
-            title=title,
-            description=description,
-            owner_id=owner_id,
-            users=users,
-            post_id=post_id
-        )
+    def create_project_s(post_id, user_id, users):
+        post = PostService.get_post_s(post_id)
+        title = post.title
+        description = post.description
+        owner_id = post.user_id
+        users = users
+        project = Project(post, title, description, owner_id, users)
         db.session.add(project)
         db.session.commit()
-        return project
+        return SchemaUtil.format_project(project)
 
     # get project by id
     @staticmethod
@@ -59,7 +61,7 @@ class ProjectService:
         new_issue = {"user_id": user_id, "content": content, "timestamp": datetime.utcnow().isoformat()}
         project.issues.append(new_issue)
         db.session.commit()
-        return project
+        return True
 
     # delete project
     @staticmethod

@@ -3,6 +3,7 @@ from sqlalchemy.sql import func
 from ..util import SchemaUtil
 from ..service import UserService
 
+
 class PostService:
 
     # get all posts
@@ -25,11 +26,11 @@ class PostService:
 
     # create post
     @staticmethod
-    def create_post_s(data):
+    def create_post_s(user_id, title, description):
         new_post = Post(
-            title=data.get('title'),
-            description=data.get('description'),
-            user_id=data.get('user_id')
+            user_id=user_id,
+            title=title,
+            description=description
         )
         db.session.add(new_post)
         db.session.commit()
@@ -37,10 +38,10 @@ class PostService:
 
     # update post
     @staticmethod
-    def update_post_s(post_id, data):
+    def update_post_s(post_id, title, description):
         post = Post.query.filter_by(is_archived=False).get_or_404(post_id)
-        post.title = data.get("title", post.title)
-        post.description = data.get("description", post.description)
+        post.title = title
+        post.description = description
         db.session.commit()
         return SchemaUtil.format_post(post)
 
@@ -100,4 +101,3 @@ class PostService:
         sorted_items = sorted(weighted_user.items(), key=lambda item: item[0], reverse=True)
         sorted_users = [user for weight, user in sorted_items]
         return [SchemaUtil.format_user(user) for user in sorted_users]
-

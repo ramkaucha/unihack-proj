@@ -15,14 +15,11 @@ class CommentService:
 
     # create comment
     @staticmethod
-    def add_comment_s(data):
-        if not data.get("content") or not data.get("post_id") or not data.get("user_id"):
-            raise ValueError("Missing required fields")
-
+    def add_comment_s(post_id, user_id, content):
         new_comment = Comment(
-            content=data["content"],
-            post_id=data["post_id"],
-            user_id=data["user_id"]
+            post_id=post_id,
+            user_id=user_id,
+            content=content
         )
         db.session.add(new_comment)
         db.session.commit()
