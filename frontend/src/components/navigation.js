@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import CreateAccountButton from "@/components/CreateAccountButton";
+//import CreateAccountButton from "@/components/CreateAccountButton";
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
