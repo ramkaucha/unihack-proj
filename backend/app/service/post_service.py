@@ -10,7 +10,7 @@ def get_posts_s():
             "post_id": post.post_id,
             "title": post.title,
             "description": post.description,
-            "create_date": post.create_date,
+            "create_time": post.create_time,
             "likes": len(post.likes) if post.likes else 0,
             "joins": len(post.joins) if post.joins else 0
         }
@@ -26,7 +26,7 @@ def get_posts_sorted_by_popularity_s():
             "post_id": post.post_id,
             "title": post.title,
             "description": post.description,
-            "create_date": post.create_date,
+            "create_time": post.create_time,
             "likes": len(post.likes) if post.likes else 0,
             "joins": len(post.joins) if post.joins else 0
         }
@@ -41,7 +41,7 @@ def get_post_s(post_id):
         "post_id": post.post_id,
         "title": post.title,
         "description": post.description,
-        "create_date": post.create_date,
+        "create_time": post.create_time,
         "likes": len(post.likes) if post.likes else 0,
         "joins": len(post.joins) if post.joins else 0
     }

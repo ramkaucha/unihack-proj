@@ -11,7 +11,7 @@ class Post(db.Model):
     description = db.Column(db.Text, nullable=False)
     likes = db.Column(db.JSON, default=[])
     joins = db.Column(db.JSON, default=[])
-    create_date = db.Column(db.DateTime, default=datetime.utc)
+    create_time = db.Column(db.DateTime, default=datetime.utc)
     is_archived = db.Column(db.Boolean, default=False)
 
     # Foreign key to Project

@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from ..service.post_service import (
+from ..service import (
     get_posts_s, get_posts_sorted_by_popularity_s, get_post_s,
     create_post_s, update_post_s, delete_post_s, archive_post_s,
     toggle_item_s
