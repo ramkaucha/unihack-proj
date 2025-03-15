@@ -3,7 +3,7 @@ from flask import jsonify
 from backend import properties
 from models import db
 from models.user import User
-from backend.app.utils.pass_util import passUtil
+from backend.app.util.pass_util import passUtil
 import jwt
 
 JWT_KEY = properties.jwt_secret_key
@@ -20,7 +20,7 @@ class UserService:
         
         if user is None:
             return jsonify({"message:": "invalid user info input"})
-        if user.userName is None:
+        if user.user_name is None:
             return jsonify({"message:": "you must set your user name"})
         if user.password is None:
             return jsonify({"message:": "you must set your password"})
@@ -28,7 +28,7 @@ class UserService:
             return jsonify({"message:": "you must set your email"})
         
         hash_pw = passUtil.encrypt_password(user.password)
-        new_user = User(userName = user.userName, password = hash_pw, email = user.email, credit = 0, isNew = True, isDelete = False)
+        new_user = User(userName = user.user_name, password = hash_pw, email = user.email, credit = 0, isNew = True, isDelete = False)
         db.session.add(new_user)
         db.session.commit()
 
@@ -41,7 +41,7 @@ class UserService:
             if passUtil.verify_password(password, user.password):
                 #if all pass, teh jwt token will be produced
                 payload ={
-                    "userId": user.userId,
+                    "userId": user.user_id,
                     "email": user.email,
                     "expires_delta": datetime.timedelta(minutes=30)
                 }
@@ -64,7 +64,7 @@ class UserService:
         if user == None:
             return jsonify({"message:": "the user does not exist"}), 404
         else:
-            return jsonify({"message:": "success", "userId": user.userId, "name": user.userName, "email": user.mail, "credits": user.credit, "isNew": user.isNew, "isDelete": user.isDelete}), 200
+            return jsonify({"message:": "success", "userId": user.user_id, "name": user.user_name, "email": user.mail, "credits": user.credit, "isNew": user.is_new, "isDelete": user.is_delete}), 200
     
     
 
@@ -74,7 +74,7 @@ class UserService:
             return jsonify({"message:": "user doesn't exists"}),404
         
         if name:
-            user.userName = name
+            user.user_name = name
         if email:
             user.email = email
         if password:
@@ -82,7 +82,7 @@ class UserService:
             user.password = hash_pw
         try:
             db.commit()
-            return jsonify({"message:": "success", "name": user.userName, "email": user.mail}), 200
+            return jsonify({"message:": "success", "name": user.user_name, "email": user.mail}), 200
         except Exception as e:
             db.session.rollback()
             return jsonify({"message": "update failed", "error": str(e)}), 500
@@ -93,23 +93,23 @@ class UserService:
         if not user:
             return jsonify({"message:": "the user doesn't exist"}), 404
         if isDelete:
-            user.isDelete = True
+            user.is_delete = True
         try:
             db.commit()
-            return jsonify({"message:": "delete success", "name": user.userName, "email": user.mail}), 200
+            return jsonify({"message:": "delete success", "name": user.user_name, "email": user.mail}), 200
         except Exception as e:
             db.session.rollback()
             return jsonify({"message": "delete failed", "error": str(e)}), 500
-        
-    def queryNameById(id:int):
-        if id == 0 or id is None:
-            return jsonify({"message": "invalid id"}), 500
-        user = User.query.filter_by(userId= id).first()
-        if user:
-            return jsonify({"user name": user.userName}),200
-        else:
-            return jsonify({"message": "user does not exist"}),404
-        
 
-        
-    
+
+# get single username by id
+def queryNameById(user_id: int):
+    if not user_id or user_id == 0:
+        return None
+    user = User.query.filter_by(userId=user_id).first()
+    return user.user_name if user else None
+
+# get multiple usernames by ids
+def get_user_names_by_ids(user_ids):
+    users = User.query.filter(User.user_id.in_(user_ids)).all()
+    return {user.user_id: user.user_name for user in users}

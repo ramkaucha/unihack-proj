@@ -1,17 +1,15 @@
 from . import db
-from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, timezone
 
-db = SQLAlchemy()
 
 class Post(db.Model):
     __tablename__ = 'posts'
     post_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    likes = db.Column(db.JSON, default=[])
-    joins = db.Column(db.JSON, default=[])
-    create_time = db.Column(db.DateTime, default=datetime.utc)
+    likes = db.Column(db.JSON, default=lambda: [])
+    joins = db.Column(db.JSON, default=lambda: [])
+    create_time = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     is_archived = db.Column(db.Boolean, default=False)
 
     # Foreign key to Project

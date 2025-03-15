@@ -1,24 +1,46 @@
-from flask import request, jsonify
-from ..service import (get_comments_c, add_comment_c, update_comment_c, delete_comment_c)
+from flask import jsonify, request
+from ..service import get_comments_s, add_comment_s, update_comment_s, delete_comment_s
 
+
+# get comments
 def get_comments(post_id):
-    comments = get_comments_c(post_id)
-    return jsonify(comments), 200
+    try:
+        comments, user_dict = get_comments_s(post_id)
+        return jsonify(comments), 200
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
 
+
+# add comment
 def add_comment():
-    data = request.get_json()
-    if not data or "content" not in data or "post_id" not in data or "user_id" not in data:
-        return jsonify({"message": "Missing required fields"}), 400
-    response = add_comment_c(data)
-    return jsonify(response), 201
+    try:
+        data = request.get_json()
+        new_comment = add_comment_s(data)
+        return jsonify(new_comment), 201
+    except ValueError as e:
+        return jsonify({"message": str(e)}), 400
+    except Exception as e:
+        return jsonify({"message": "Internal server error"}), 500
 
+
+# update comment
 def update_comment(comment_id):
-    data = request.get_json()
-    if not data or "content" not in data:
-        return jsonify({"message": "Missing content field"}), 400
-    response = update_comment_c(comment_id, data)
-    return jsonify(response), 200
+    try:
+        data = request.get_json()
+        updated_comment = update_comment_s(comment_id, data)
+        return jsonify(updated_comment), 200
+    except ValueError as e:
+        return jsonify({"message": str(e)}), 404
+    except Exception as e:
+        return jsonify({"message": "Internal server error"}), 500
 
+
+# delete comment
 def delete_comment(comment_id):
-    response = delete_comment_c(comment_id)
-    return jsonify(response), 200
+    try:
+        deleted_comment_id = delete_comment_s(comment_id)
+        return jsonify(deleted_comment_id), 200
+    except ValueError as e:
+        return jsonify({"message": str(e)}), 404
+    except Exception as e:
+        return jsonify({"message": "Internal server error"}), 500

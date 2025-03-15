@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
-from models import db
-from models import Post, User, Comment, Project
+from model import db
+from model import Post, user, Comment, Project
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import requests
