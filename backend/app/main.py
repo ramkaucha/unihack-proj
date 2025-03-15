@@ -19,7 +19,7 @@ API_URL = os.environ.get("API_URL", "http://localhost:5000")
 CLIENT_URL = os.environ.get("CLIENT_URL", "http://localhost:3000")
 
 
-@app.route("/")
+@app.route("/solve")
 def read_root():
     return jsonify({
         "message": "Hello World"
@@ -48,3 +48,5 @@ def create_tables():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
+
+exported_app = app
