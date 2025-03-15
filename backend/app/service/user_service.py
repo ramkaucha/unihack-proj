@@ -12,23 +12,23 @@ class UserService:
         self.user_model = User()
 
 
-    def register(user: User):
+    def register(name: str, password: str, email: str):
         #test if the user has been exixted
-        existing_user = User.query.filter_by(email=user.email).first()
+        existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             return jsonify({"message:": "the user has been existed"}),404
         
-        if user is None:
-            return jsonify({"message:": "invalid user info input"})
-        if user.userName is None:
+        # if user is None:
+        #     return jsonify({"message:": "invalid user info input"})
+        if name is None:
             return jsonify({"message:": "you must set your user name"})
-        if user.password is None:
+        if password is None:
             return jsonify({"message:": "you must set your password"})
-        if user.email in None:
+        if email in None:
             return jsonify({"message:": "you must set your email"})
         
-        hash_pw = passUtil.encrypt_password(user.password)
-        new_user = User(userName = user.userName, password = hash_pw, email = user.email, credit = 0, isNew = True, isDelete = False)
+        hash_pw = passUtil.encrypt_password(password)
+        new_user = User(userName = name, password = hash_pw, email = email, credit = 0, isNew = True, isDelete = False)
         db.session.add(new_user)
         db.session.commit()
 
@@ -55,7 +55,6 @@ class UserService:
 
         
     #filter that if the user which has not been deleted
-    #need to change
     def query_user_by_name(name: str):
         if name == None:
             return jsonify({"message:": "please enter the user name"}),404
