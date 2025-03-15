@@ -1,13 +1,13 @@
 from flask import Blueprint
-from ..controller import (get_comments, add_comment, update_comment, delete_comment)
+from ..controller import CommentController
 
 comment_bp = Blueprint("comment", __name__)
 
 # get comments
-comment_bp.route("/<int:post_id>/comments", methods=["GET"])(get_comments)
+comment_bp.route("/<int:post_id>/comments", methods=["GET"])(CommentController.get_comments)
 # add comment
-comment_bp.route("/comments", methods=["POST"])(add_comment)
+comment_bp.route("/comments", methods=["POST"])(CommentController.add_comment)
 # update comment
-comment_bp.route("/comments/<int:comment_id>", methods=["PUT"])(update_comment)
+comment_bp.route("/comments/<int:comment_id>", methods=["PUT"])(CommentController.update_comment)
 # delete comment
-comment_bp.route("/comments/<int:comment_id>", methods=["DELETE"])(delete_comment)
+comment_bp.route("/comments/<int:comment_id>", methods=["DELETE"])(CommentController.delete_comment)
