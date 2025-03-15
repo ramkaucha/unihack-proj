@@ -40,6 +40,10 @@ export default function ProjectPage() {
       username: "AliceJohnson",
       role: "UI/UX Designer",
     },
+    {
+      username: "Addd",
+      role: "UI/UX Designer 2",
+    },
   ];
 
   // Assign avatars using the image names from your public folder
@@ -105,30 +109,26 @@ export default function ProjectPage() {
         </div>
       </div>
 
-      <div className="w-full md:w-3/5">
+      <div className="w-full md:w-[30%]">
         {/* Section 3: Expandable Members Section */}
-        <section className="mb-8 md:w-3/4">
-          <button
-            onClick={toggleMembersSection}
-            className="text-blue-600 dark:text-blue-400 font-semibold hover:underline text-2xl font-bold text-gray-800 dark:text-gray-100"
-          >
-            {isMembersExpanded ? "Hide Members" : "Show Members"}
-          </button>
+        <div className="w-full md:w-[100%]">
+          <div className="mb-8 md:w-[100%]">
+            <div className="w-full flex align-center items-center">
+              <div className="w-full">
+                <span className="text-blue-600 dark:text-blue-400 font-semibold hover:underline text-2xl font-bold text-gray-800 dark:text-gray-100">
+                  Members
+                </span>
+              </div>
+            </div>
 
-          {isMembersExpanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              transition={{ duration: 0.3 }}
-              className="mt-4 flex flex-wrap gap-4"
-            >
+            <div className="w-full flex flex-wrap gap-6 justify-start">
               {members.map((member, index) => {
                 // Assign an avatar based on index (rotate through provided images)
                 const avatars = [
                   "/frog.png",
                   "/hen.png",
                   "/tiger.png",
-                  "/shrak.png",
+                  "/shark.png",
                   "/hen.png",
                   "/rabbit.png",
                 ];
@@ -137,29 +137,27 @@ export default function ProjectPage() {
                 return (
                   <div
                     key={index}
-                    className="w-full md:w-[35%] p-2 flex justify-left border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm bg-white dark:bg-gray-800"
+                    className="w-full md:w-[40%] p-4 flex items-center border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm bg-white dark:bg-gray-800"
                   >
-                    <div className="flex justify-center items-center space-x-2">
-                      <img
-                        src={avatar}
-                        alt={`${member.username} Avatar`}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                      <div className="ml-2 ">
-                        <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">
-                          {member.username}
-                        </h3>
-                        <p className="text-xs text-gray-600 mt-1 dark:text-gray-300">
-                          {member.role}
-                        </p>
-                      </div>
+                    <img
+                      src={avatar}
+                      alt={`${member.username} Avatar`}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div className="ml-4">
+                      <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">
+                        {member.username}
+                      </h3>
+                      <p className="text-xs text-gray-600 mt-1 dark:text-gray-300">
+                        {member.role}
+                      </p>
                     </div>
                   </div>
                 );
               })}
-            </motion.div>
-          )}
-        </section>
+            </div>
+          </div>
+        </div>
 
         {/* Section 4: Project Status */}
         <section className="mb-10">
