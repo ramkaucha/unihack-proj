@@ -3,17 +3,22 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, User } from "lucide-react";
 import { ModeToggle } from "./NodeToggle";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import ThemeAwareImage from "./ThemeAwareImage";
+import { isAuthenticated, removeToken } from "@/lib/auth";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
+  const [ authenticated, setAuthenticated ] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    setAuthenticated(isAuthenticated());
+
     const handleScroll = () => {
       if (window.scrollY > 10) {
         setScrolled(true);
@@ -24,11 +29,15 @@ export default function Navigation() {
 
     window.addEventListener("scroll", handleScroll);
 
-    // Cleanup
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const logout = () => {
+    removeToken();
+    router.push('/');
+  }
 
   return (
     <motion.header
@@ -47,10 +56,32 @@ export default function Navigation() {
             </Link>
           </div>
           <nav className="flex space-x-6 items-center mt-3">
-            <Button onClick={() => router.push('/login')} variant="outline" className="text-gray-900 dark:text-gray-300 transition-colors flex flex-row items-center space-x-2 border-1 rounded-md py-2 px-3" >
-              <span>Sign In!</span>
-              <ArrowRight className="w-4 h-4" />
-            </Button>
+            {authenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 border-2 border-white dark:border-gray-700 focus:outline-none">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/settings')}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Settings</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="cursor-pointer text-red-500 focus:text-red-500" onClick={logout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Logout</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button onClick={() => router.push('/login')} variant="outline" className="text-gray-900 dark:text-gray-300 transition-colors flex flex-row items-center space-x-2 border-1 rounded-md py-2 px-3" >
+                <span>Sign In!</span>
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            )}
             <ModeToggle/>
           </nav>
         </div>
