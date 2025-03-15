@@ -1,6 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from . import db
 
 class Project(db.Model):
     __tablename__ = 'projects'  # 修正为 __tablename__
