@@ -1,5 +1,6 @@
 from datetime import datetime
 from ..model import db, Project
+from ..service import UserService
 
 
 class ProjectService:
@@ -41,6 +42,11 @@ class ProjectService:
         if not project:
             return None
         project.status = new_status
+        new_users_count = sum(1 for user in project.users if user.is_new=="True")
+        if project.status == "done":
+            for user_id in project.users:
+                UserService.increase_credit(user_id, 1 + new_users_count)
+                UserService.check_new(user_id)
         db.session.commit()
         return project
 

@@ -1,7 +1,7 @@
 from ..model import db, Post
 from sqlalchemy.sql import func
 from ..util import SchemaUtil
-
+from ..service import UserService
 
 class PostService:
 
@@ -75,3 +75,29 @@ class PostService:
             message = f"Post {field[:-1]} added successfully!"
         db.session.commit()
         return {"message": message}
+
+    @staticmethod
+    def get_likes_s(post_id):
+        post = Post.query.get_or_404(post_id)
+        users = UserService.get_users_by_id(post.likes)
+        return [SchemaUtil.format_user(user) for user in users]
+
+    @staticmethod
+    def get_join_s(post_id):
+        post = Post.query.get_or_404(post_id)
+        users = UserService.get_users_by_id(post.joins)
+        return [SchemaUtil.format_user(user) for user in users]
+
+    @staticmethod
+    def get_join_shuffle(post_id):
+        post = Post.query.get_or_404(post_id)
+        weighted_user = {}
+        users = UserService.get_users_by_id(post.joins)
+        for index, user in enumerate(users):
+            weight_index = 1 / (index + 1)
+            weight = user.credit * weight_index
+            weighted_user[weight] = user
+        sorted_items = sorted(weighted_user.items(), key=lambda item: item[0], reverse=True)
+        sorted_users = [user for weight, user in sorted_items]
+        return [SchemaUtil.format_user(user) for user in sorted_users]
+

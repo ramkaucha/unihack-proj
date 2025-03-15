@@ -1,4 +1,6 @@
-from service.user_service import UserService
+from flask import jsonify
+
+from ..service import UserService
 
 
 # data from frontend: "user_id", "user_name", "password", "email", "is_delete"
@@ -30,3 +32,12 @@ class user_controller:
         id = data.get("user_id") if data else None
         isDelete = data.get("is_delete") if data else None
         return UserService.delete_user(id, isDelete)
+
+    # get credit
+    @staticmethod
+    def get_credit(user_id: int):
+        try:
+            result = UserService.get_credit(user_id)
+            return jsonify(result), 200
+        except Exception as e:
+            return jsonify({"message": "Internal server error", "error": str(e)}), 500

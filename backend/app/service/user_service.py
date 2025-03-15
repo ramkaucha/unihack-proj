@@ -66,7 +66,7 @@ class UserService:
             return jsonify({"message:": "success", "userId": user.user_id, "name": user.user_name, "email": user.mail,
                             "credits": user.credit, "isNew": user.is_new, "isDelete": user.is_delete}), 200
 
-    def update_user_detail(id: int, name: str, email: str, password: str):
+    def update_user_detail(id: int, name: str, email: str, password: str, profile: str):
         user = User.query.filter_by(userId=id, isDelete=False).first()
         if user is None:
             return jsonify({"message:": "user doesn't exists"}), 404
@@ -78,6 +78,8 @@ class UserService:
         if password:
             hash_pw = PassUtil.encrypt_password(password)
             user.password = hash_pw
+        if profile:
+            user.profile = profile
         try:
             db.commit()
             return jsonify({"message:": "success", "name": user.user_name, "email": user.mail}), 200
@@ -98,9 +100,24 @@ class UserService:
             db.session.rollback()
             return jsonify({"message": "delete failed", "error": str(e)}), 500
 
+    # get user by id
+    @staticmethod
+    def get_user_by_id(user_id: int):
+        user = User.query.filter_by(user_id=user_id, isDelete=False).first()
+        if user is None:
+            return {"message": "user does not exist"}
+        return user
+
+    # get users by id
+    @staticmethod
+    def get_users_by_id(user_ids: set):
+        users = User.query.filter(User.user_id.in_(user_ids), isDelete=False).all()
+        return users
+
     # get multiple usernames by ids
+    @staticmethod
     def get_user_names_by_ids(user_ids: set):
-        users = User.query.filter(User.user_id.in_(user_ids)).all()
+        users = UserService.get_users_by_id(user_ids)
         return {user.user_id: user.user_name for user in users}
 
     # increase user credit
@@ -123,4 +140,14 @@ class UserService:
         user = User.query.filter_by(user_id=user_id, isDelete=False).first()
         if user is None:
             return {"message": "user does not exist"}
-        return {"message": "success", "credit": user.credit}
+        return user.credit
+
+    @staticmethod
+    def check_new(user_id: int):
+        user = User.query.filter_by(user_id=user_id, isDelete=False).first()
+        if user is None:
+            return None
+        if user.credit >= 10:
+            user.is_new = False
+        db.session.commit()
+        return user

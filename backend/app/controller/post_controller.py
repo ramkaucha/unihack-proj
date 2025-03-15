@@ -60,3 +60,21 @@ class PostController:
         if not user_id:
             return jsonify({"message": "user_id is required"}), 400
         return jsonify(PostService.toggle_item_s(post_id, "join", user_id)), 200
+
+    # get list of users who likes
+    @staticmethod
+    def get_likes(post_id):
+        likes = PostService.get_likes_s(post_id)
+        return jsonify(likes), 200
+
+    # get list of users who wanna join
+    @staticmethod
+    def get_joins(post_id):
+        joins = PostService.get_join_s(post_id)
+        return jsonify(joins), 200
+
+    # get list of users who wanna join in shuffle order
+    @staticmethod
+    def get_join_shuffle(post_id):
+        join_shuffle = PostService.get_join_shuffle(post_id)
+        return jsonify(join_shuffle), 200
