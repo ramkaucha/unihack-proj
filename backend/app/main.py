@@ -1,17 +1,21 @@
 from flask import Flask, jsonify
+from models import db
+from models import Post, User, Comment, Project
+from routes.user_routes import user_routes
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import requests
 import os
 
 app = Flask(__name__)
-
+#register blueprint
+app.register_blueprint(user_routes)
 # sqlite database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # 数据库路径
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # init db
-db = SQLAlchemy(app)
+db.init_app(app)
 
 CORS(app)
 
