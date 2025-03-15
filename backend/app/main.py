@@ -1,9 +1,17 @@
 from flask import Flask, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import requests
 import os
 
 app = Flask(__name__)
+
+# sqlite database config
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # 数据库路径
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# init db
+db = SQLAlchemy(app)
 
 CORS(app)
 
@@ -22,6 +30,11 @@ def check_environment():
         "api_url": API_URL,
         "client_url": CLIENT_URL
     })
+
+# create tables
+@app.before_first_request
+def create_tables():
+    db.create_all()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
