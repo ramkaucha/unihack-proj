@@ -1,25 +1,106 @@
-#queryUserDetail
-#addUser
-#deleteUser
-#updateUserDetail
+from datetime import datetime
 from flask import jsonify
-from model.User import User
-from PassUtil import
+from backend import properties
+from models import db
+from models.User import User
+from utils.PassUtil import passUtil
+import jwt
+
+JWT_KEY = properties.jwt_secret_key
 class UserService:
     def __init__(self):
         self.user_model = User()
 
-    def register(user: User):
-        if user is None or user.userId is None:
-            return jsonify({"message:": "invalid user"})
-        if Pass
-            user.password
 
-    def queryUserDetail(id: int):
-        if id == None or id == 0:
-            return jsonify({"message:": "invalid user"})
-        user = User.query.get(id)
-        if user == None:
-            return jsonify({"message:": "the user does not exist"})
+    def register(user: User):
+        #test if the user has been exixted
+        existing_user = User.query.filter_by(email=user.email).first()
+        if existing_user:
+            return jsonify({"message:": "the user has been existed"}),404
+        
+        if user is None:
+            return jsonify({"message:": "invalid user info input"})
+        if user.userName is None:
+            return jsonify({"message:": "you must set your user name"})
+        if user.password is None:
+            return jsonify({"message:": "you must set your password"})
+        if user.email in None:
+            return jsonify({"message:": "you must set your email"})
+        
+        hash_pw = passUtil.encrypt_password(user.password)
+        new_user = User(userName = user.userName, password = hash_pw, email = user.email, credit = 0, isNew = True, isDelete = False)
+        db.session.add(new_user)
+        db.session.commit()
+
+
+    def login(userName, password):
+        if userName or password is None:
+            return jsonify({"message:": "the user name or the password is null"})
+        user = User.query.filter_by(userName = userName).first()
+        if user:
+            if passUtil.verify_password(password, user.password):
+                #if all pass, teh jwt token will be produced
+                payload ={
+                    "userId": user.userId,
+                    "email": user.email,
+                    "expires_delta": datetime.timedelta(minutes=30)
+                }
+                token = jwt.encode(payload, JWT_KEY, algorithm='HS256')
+                print(token)
+                return jsonify({"message:": "login successful"}),200
+            else:
+                return jsonify({"message:": "login fail"})
         else:
-            return jsonify({"message:": "success", "name": user.userName, "email": user.mail, "credits": user.credit})
+            return jsonify({"message:": "the user doesn't exist"}), 404
+
+        
+    #filter that if the user which has not been deleted
+    #need to change
+    def query_user_by_name(name: str):
+        if name == None:
+            return jsonify({"message:": "please enter the user name"}),404
+        user = User.query.filter_by(userName = name, isDelete = False).first()
+
+        if user == None:
+            return jsonify({"message:": "the user does not exist"}), 404
+        else:
+            return jsonify({"message:": "success", "userId": user.userId, "name": user.userName, "email": user.mail, "credits": user.credit, "isNew": user.isNew, "isDelete": user.isDelete}), 200
+    
+    
+
+    def update_user_detail(id: int, name:str, email: str, password: str):
+        user = User.query.filter_by(userId=id).first()
+        if user is None:
+            return jsonify({"message:": "user doesn't exists"}),404
+        
+        if name:
+            user.userName = name
+        if email:
+            user.email = email
+        if password:
+            hash_pw = passUtil.encryptPassword(password)
+            user.password = hash_pw
+        try:
+            db.commit()
+            return jsonify({"message:": "success", "name": user.userName, "email": user.mail}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"message": "update failed", "error": str(e)}), 500
+
+
+    def delete_user(id:int, isDelete: bool):
+        user = User.query.filter_by(id).first()
+        if not user:
+            return jsonify({"message:": "the user doesn't exist"}), 404
+        if isDelete:
+            user.isDelete = True
+        try:
+            db.commit()
+            return jsonify({"message:": "delete success", "name": user.userName, "email": user.mail}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"message": "delete failed", "error": str(e)}), 500
+        
+
+        
+    

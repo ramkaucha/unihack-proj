@@ -1,1 +1,1 @@
-db_
+jwt_secret_key = "WHILE_TRUE"
