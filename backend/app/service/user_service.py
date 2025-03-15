@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import jsonify
 from backend import properties
 from models import db
-from models.User import User
+from models.user import User
 from utils.PassUtil import passUtil
 import jwt
 
