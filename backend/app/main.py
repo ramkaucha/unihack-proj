@@ -3,8 +3,14 @@ from model import db
 from flask_cors import CORS
 import requests
 import os
+from .route import comment_bp, post_bp, project_bp
 
 app = Flask(__name__)
+
+# 注册 Blueprint，并指定 URL 前缀
+app.register_blueprint(comment_bp, url_prefix="/comments")
+app.register_blueprint(post_bp, url_prefix="/posts")
+app.register_blueprint(project_bp, url_prefix="/projects")
 
 # sqlite database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # 数据库路径
