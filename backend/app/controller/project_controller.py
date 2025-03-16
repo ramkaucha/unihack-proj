@@ -1,6 +1,6 @@
 from flask import jsonify, request
-from ..service import ProjectService
-from ..util import SchemaUtil
+from backend.app.service.project_service import ProjectService
+from backend.app.util.schema_util import SchemaUtil
 
 
 class ProjectController:

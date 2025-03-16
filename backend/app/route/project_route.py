@@ -1,10 +1,10 @@
 from flask import Blueprint
-from ..controller import ProjectController
+from backend.app.controller.project_controller import ProjectController
 
 project_bp = Blueprint('project', __name__)
 
 # create project
-project_bp.route('/<int: post_id>/project/<int:user_id>', methods=['POST'])(ProjectController.create_project)
+project_bp.route('/<int:post_id>/project/<int:user_id>', methods=['POST'])(ProjectController.create_project)
 # get project by id
 project_bp.route('/<int:project_id>', methods=['GET'])(ProjectController.get_project)
 # update project

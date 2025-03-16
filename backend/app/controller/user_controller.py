@@ -1,6 +1,6 @@
 from flask import jsonify
 
-from ..service import UserService
+from backend.app.service.user_service import UserService
 
 
 # data from frontend: "user_id", "user_name", "password", "email", "is_delete"

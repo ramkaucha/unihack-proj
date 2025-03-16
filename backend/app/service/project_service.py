@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from . import PostService
+import backend.app.service.post_service as PostService
 from ..model import db, Project
-from ..service import UserService
+from backend.app.service.user_service import UserService
 from ..util import SchemaUtil
 
 

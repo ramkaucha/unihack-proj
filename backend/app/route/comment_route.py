@@ -1,5 +1,5 @@
 from flask import Blueprint
-from ..controller import CommentController
+from backend.app.controller.comment_controller import CommentController
 
 comment_bp = Blueprint("comment", __name__)
 

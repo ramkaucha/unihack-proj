@@ -1,5 +1,5 @@
 from flask import Blueprint
-from ..controller import PostController
+from backend.app.controller.post_controller import PostController
 
 post_bp = Blueprint('post', __name__)
 
