@@ -32,6 +32,21 @@ class user_controller:
         id = data.get("user_id") if data else None
         isDelete = data.get("is_delete") if data else None
         return UserService.delete_user(id, isDelete)
+    
+    def get_user_names_by_ids(self, data):
+        #the ids argument should be set type
+        ids = data.get("user_ids") if data else None
+        return UserService.get_user_names_by_ids(ids)
+    
+    def increse_credit(self, data):
+        id = data.get("user_id") if data else None
+        amount = data.get("credist_amount") if data else None
+        return UserService.get_credit(id, amount)
+    
+    
+    def query_credit_by_user(self, data):
+        id = data.get("user_id") if data else None
+        return UserService.get_credit(id)
 
     # get credit
     @staticmethod
