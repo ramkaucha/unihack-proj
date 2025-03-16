@@ -1,4 +1,4 @@
-from model import Post, Comment, Project, User
+from backend.app.model import Post, Comment, Project, User
 
 
 class SchemaUtil:
