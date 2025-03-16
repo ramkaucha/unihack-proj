@@ -29,6 +29,7 @@ SOLVE also helps regular users by providing solutions to their everyday tech pro
 ![](images/3.png)
 ![](images/4.png)
 ![](images/5.png)
-
+![](images/6.png)
+![](images/7.png)
 
 Join us on this journey where **real problems meet real solutions!**
