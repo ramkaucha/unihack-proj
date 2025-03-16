@@ -1,17 +1,11 @@
 import os
 import openai
-from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Get API key securely
+# Load OpenAI API key securely from environment variables
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     raise ValueError("Missing OpenAI API key. Please set the OPENAI_API_KEY environment variable.")
 openai.api_key = api_key
-
-MAX_WARNINGS = 3
 
 def detect_language(text):
     """Detects the language of the input text."""
@@ -37,12 +31,11 @@ def check_for_inappropriate_content(text):
     )
     return response["choices"][0]["message"]["content"].strip().lower()
 
-def generate_issue_report(conversation_history, language):
+def generate_issue_report(text, language):
     """Generates a structured issue report."""
-    full_input = "\n".join(conversation_history)
     prompt = f"""
-    Convert the following user conversation into a structured issue report in {language}:
-    {full_input}
+    Convert the following user input into a structured issue report in {language}:
+    {text}
     """
     response = openai.ChatCompletion.create(
         model="gpt-4",
