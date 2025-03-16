@@ -13,5 +13,5 @@ class Project(db.Model):
     issues = db.Column(db.JSON, default=lambda: [])  # user_id, content, and timestamp.
 
     # fk
-    post_id = db.Column(db.Integer, db.ForeignKey('posts.post_id'), nullable=False)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    post_id = db.Column(db.Integer, nullable=False)
+    owner_id = db.Column(db.Integer, nullable=False)
