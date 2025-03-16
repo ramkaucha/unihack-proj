@@ -7,7 +7,7 @@ class Project(db.Model):
     project_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    users = db.Column(db.JSON, nullable=False)
+    users = db.Column(db.JSON, default=lambda: [], nullable=False)
     status = db.Column(db.String, default="design")  # [design, develop, done]
     create_time = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     issues = db.Column(db.JSON, default=lambda: [])  # user_id, content, and timestamp.
