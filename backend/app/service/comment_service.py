@@ -1,6 +1,6 @@
-from ..model import db, Comment
+from model import db, Comment
 from .user_service import UserService
-from ..util import SchemaUtil
+from util import SchemaUtil
 
 
 class CommentService:

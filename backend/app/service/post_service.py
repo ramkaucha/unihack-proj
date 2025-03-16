@@ -1,7 +1,11 @@
-from ..model import db, Post
+# from ..model import db, Post
+from model import db, Post
 from sqlalchemy.sql import func
-from ..util import SchemaUtil
-from ..service import UserService
+from util import SchemaUtil
+# from ..util import SchemaUtil
+# from service import UserService
+
+from service.user_service import UserService
 
 
 class PostService:
