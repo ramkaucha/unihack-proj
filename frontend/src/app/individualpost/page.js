@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import moment from "moment";
 
 export default function ProjectPage() {
   // State for handling expandable section
@@ -47,23 +48,46 @@ export default function ProjectPage() {
   ];
 
   // Assign avatars using the image names from your public folder
-  const comments = [
+  const [commentText, setCommentText] = useState("");
+  const [comments, setComments] = useState([
     {
       user: "JohnDoe",
       comment: "Great work! Keep it up.",
       avatar: "/frog.png",
+      timestamp: moment().format("LT"),
     },
     {
       user: "JaneSmith",
       comment: "I agree, the design looks amazing.",
       avatar: "/hen.png",
+      timestamp: moment().format("LT"),
     },
     {
       user: "AliceJohnson",
       comment: "Thanks, I will work on the next iteration!",
       avatar: "/tiger.png",
+      timestamp: moment().format("LT"),
     },
-  ];
+  ]);
+
+  const currentUser = {
+    username: "GuestUser",
+    avatar: "/rabbit.png",
+  };
+
+  const handleAddComment = () => {
+    if (!commentText.trim()) return;
+
+    const newComment = {
+      user: currentUser.username,
+      comment: commentText,
+      avatar: currentUser.avatar,
+      timestamp: moment().format("LT"), // Current time
+    };
+
+    setComments([newComment, ...comments]);
+    setCommentText(""); // Clear input field
+  };
 
   // Handle expanding/collapsing member section
   const toggleMembersSection = () => {
@@ -108,93 +132,117 @@ export default function ProjectPage() {
           {/* Second sub-div takes 25% of the width */}
         </div>
       </div>
+      <div className="w-full md:w-[100%] flex align-center justify-center items-center">
+        <div className="w-full md:w-[50%]">
+          {/* Section 3: Expandable Members Section */}
+          <div className="w-full md:w-[100%]">
+            <div className="mb-8 md:w-[100%]">
+              <div className="w-full flex align-center items-center">
+                <div className="w-full">
+                  <span className="text-blue-600  dark:text-blue-400 font-semibold hover:underline text-2xl font-bold text-gray-800 dark:text-gray-100">
+                    Members
+                  </span>
+                </div>
+              </div>
 
-      <div className="w-full md:w-[30%]">
-        {/* Section 3: Expandable Members Section */}
-        <div className="w-full md:w-[100%]">
-          <div className="mb-8 md:w-[100%]">
-            <div className="w-full flex align-center items-center">
-              <div className="w-full">
-                <span className="text-blue-600 dark:text-blue-400 font-semibold hover:underline text-2xl font-bold text-gray-800 dark:text-gray-100">
-                  Members
-                </span>
+              <div className="w-full flex mt-4 flex-wrap gap-6 justify-start">
+                {members.map((member, index) => {
+                  // Assign an avatar based on index (rotate through provided images)
+                  const avatars = [
+                    "/frog.png",
+                    "/hen.png",
+                    "/tiger.png",
+                    "/shark.png",
+                    "/hen.png",
+                    "/rabbit.png",
+                  ];
+                  const avatar = avatars[index % avatars.length];
+
+                  return (
+                    <div
+                      key={index}
+                      className="w-full sm:w-[48%] md:w-[30%] p-4 flex items-center border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm bg-white dark:bg-gray-800"
+                    >
+                      <img
+                        src={avatar}
+                        alt={`${member.username} Avatar`}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div className="ml-4">
+                        <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">
+                          {member.username}
+                        </h3>
+                        <p className="text-xs text-gray-600 mt-1 dark:text-gray-300">
+                          {member.role}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-
-            <div className="w-full flex flex-wrap gap-6 justify-start">
-              {members.map((member, index) => {
-                // Assign an avatar based on index (rotate through provided images)
-                const avatars = [
-                  "/frog.png",
-                  "/hen.png",
-                  "/tiger.png",
-                  "/shark.png",
-                  "/hen.png",
-                  "/rabbit.png",
-                ];
-                const avatar = avatars[index % avatars.length];
-
-                return (
-                  <div
-                    key={index}
-                    className="w-full md:w-[40%] p-4 flex items-center border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm bg-white dark:bg-gray-800"
-                  >
-                    <img
-                      src={avatar}
-                      alt={`${member.username} Avatar`}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div className="ml-4">
-                      <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">
-                        {member.username}
-                      </h3>
-                      <p className="text-xs text-gray-600 mt-1 dark:text-gray-300">
-                        {member.role}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
           </div>
+
+          {/* Section 4: Project Status */}
+          <section className="mb-10">
+            <div className="flex items-center">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mr-6">
+                Project Status:
+              </h2>
+              <div className="mt-4 flex flex-wrap gap-6">
+                {statProject === "Design" && (
+                  <span className="inline-block px-6 py-3 bg-yellow-300 text-gray-800 rounded-full text-base font-semibold">
+                    In Design
+                  </span>
+                )}
+                {statProject === "Development" && (
+                  <span className="inline-block px-6 py-3 bg-blue-300 text-gray-800 rounded-full text-base font-semibold">
+                    In Development
+                  </span>
+                )}
+                {statProject === "Done" && (
+                  <span className="inline-block px-6 py-3 bg-green-300 text-gray-800 rounded-full text-base font-semibold">
+                    Done
+                  </span>
+                )}
+              </div>
+            </div>
+          </section>
         </div>
-
-        {/* Section 4: Project Status */}
-        <section className="mb-10">
-          <div className="flex items-center">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mr-6">
-              Project Status:
-            </h2>
-            <div className="mt-4 flex flex-wrap gap-6">
-              {statProject === "Design" && (
-                <span className="inline-block px-6 py-3 bg-yellow-300 text-gray-800 rounded-full text-base font-semibold">
-                  In Design
-                </span>
-              )}
-              {statProject === "Development" && (
-                <span className="inline-block px-6 py-3 bg-blue-300 text-gray-800 rounded-full text-base font-semibold">
-                  In Development
-                </span>
-              )}
-              {statProject === "Done" && (
-                <span className="inline-block px-6 py-3 bg-green-300 text-gray-800 rounded-full text-base font-semibold">
-                  Done
-                </span>
-              )}
-            </div>
-          </div>
-        </section>
       </div>
 
       {/* Container */}
       <div className="max-w-5xl mx-auto px-4 py-8 md:py-12">
         {/* Section 1: Title and Description */}
 
-        {/* Section 5: Comment Section */}
-        <section className="mb-8">
+        <section className="mt-10">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
             Comments
           </h2>
+
+          {/* Input Field for New Comments */}
+          <div className="mb-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 flex items-center space-x-3">
+            <img
+              src={currentUser.avatar}
+              alt="User Avatar"
+              className="w-12 h-12 rounded-full object-cover"
+            />
+            <input
+              type="text"
+              placeholder="Write a comment..."
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              className="w-full px-4 py-2 text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              onClick={handleAddComment}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+            >
+              Post
+            </button>
+          </div>
+
+          {/* Display Comments */}
           <div className="space-y-4">
             {comments.map((comment, index) => (
               <div
@@ -205,11 +253,14 @@ export default function ProjectPage() {
                   <img
                     src={comment.avatar}
                     alt={`${comment.user} Avatar`}
-                    className="w-12 h-12 rounded-full object-cover"
+                    className="w-10 h-10 rounded-full object-cover"
                   />
                   <div>
                     <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">
-                      {comment.user}
+                      {comment.user}{" "}
+                      <span className="text-sm text-gray-500">
+                        • {comment.timestamp}
+                      </span>
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
                       {comment.comment}
