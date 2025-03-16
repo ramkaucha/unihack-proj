@@ -17,7 +17,7 @@ CORS(app)
 
 API_URL = os.environ.get("API_URL", "http://localhost:5000")
 CLIENT_URL = os.environ.get("CLIENT_URL", "http://localhost:3000")
-
+OPEN_API = os.environ.get("OPEN_AI_API")
 
 @app.route("/solve")
 def read_root():
