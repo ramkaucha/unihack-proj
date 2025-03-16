@@ -3,7 +3,7 @@ from flask import jsonify
 from ..service import UserService
 
 
-# data from frontend: "user_id", "user_name", "password", "email", "is_delete"
+# data from frontend: "user_id", "user_name", "password", "email", "is_delete", "credist_amount"
 
 class user_controller:
     def register(self, data):
