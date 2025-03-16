@@ -18,24 +18,25 @@ export default function RegisterForm() {
     e.preventDefault();
 
     try {
-      const formPayload = new URLSearchParams({
+      const jsonPayload = {
         username: formData.username,
         password: formData.password,
         email: formData.email,
         name: formData.name
-      });
+      };
 
       const response = await fetch(`${AUTH_ENDPOINTS.REGISTER}`, {
         method: 'POST',
         headers: {
-          'Content-type': 'application/x-www-form-urlencoded',
+          'Content-type': 'application/json',
           'Accept': 'application/json'
         },
-        body: formPayload.toString(),
+        body: JSON.stringify(jsonPayload),
         credentials: 'omit',
       });
 
       if (!response.ok) {
+        console.log(response);
         notifyService.showError('Error while Registering. Try Again!');
         return;
       }
