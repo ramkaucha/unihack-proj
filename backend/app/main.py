@@ -3,21 +3,29 @@ from model import db
 from flask_cors import CORS
 import requests
 import os
-from route.user_route import user_routes
+import backend.app.route.comment_route as comment_route
+import backend.app.route.post_route as post_route
+import backend.app.route.project_route as project_route
+import backend.app.route.user_route as user_route
 
 app = Flask(__name__)
 
+app.register_blueprint(comment_route.comment_bp, url_prefix="/comments")
+app.register_blueprint(post_route.post_bp, url_prefix="/posts")
+app.register_blueprint(project_route.project_bp, url_prefix="/projects")
+app.register_blueprint(user_route.user_bp)
+
 # sqlite database config
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # 数据库路径
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # init db
 db.init_app(app)
 
+CORS(app)
 
 API_URL = os.environ.get("API_URL", "http://localhost:5000")
 CLIENT_URL = os.environ.get("CLIENT_URL", "http://localhost:3000")
-OPEN_API = os.environ.get("OPEN_AI_API")
 # CORS(app, resources={r"/*": {"origins": CLIENT_URL}})
 
 CORS(app, resources={
@@ -61,8 +69,6 @@ def create_tables():
     if not created:
         db.create_all()
         created = True
-
-app.register_blueprint(user_routes)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

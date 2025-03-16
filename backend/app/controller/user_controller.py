@@ -1,9 +1,9 @@
 from flask import jsonify
 
-from service.user_service import UserService
+from backend.app.service.user_service import UserService
 
 
-# data from frontend: "user_id", "user_name", "password", "email", "is_delete", "credist_amount"
+# data from frontend: "user_id", "user_name", "password", "email", "is_delete"
 
 class user_controller:
     def register(data):
@@ -13,7 +13,7 @@ class user_controller:
         email = data.get("email") if data else None
         return UserService.register(userName, password, email)
 
-    def login(data):
+    def login(self, data):
         userName = data.get("user_name") if data else None
         password = data.get("password") if data else None
         return UserService.login(userName, password)
