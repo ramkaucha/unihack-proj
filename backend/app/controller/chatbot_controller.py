@@ -10,7 +10,6 @@ chatbot_bp = Blueprint('chatbot', __name__)
 def chat():
     data = request.json
     user_input = data.get("message", "").strip()
-    project_id = data.get("project_id")
     user_id = data.get("user_id")
     
     if not user_input:
