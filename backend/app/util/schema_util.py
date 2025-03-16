@@ -4,8 +4,11 @@ from ..model import Post, Comment, Project, User
 class SchemaUtil:
     @staticmethod
     def format_post(post: Post):
+        user = User.query.get(post.user_id)
+        user_name = user.user_name if user else "Unknown"
         return {
             "post_id": post.post_id,
+            "user_name": user_name,
             "title": post.title,
             "description": post.description,
             "create_time": post.create_time,
