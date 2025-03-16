@@ -3,6 +3,7 @@ import notifyService from "@/components/notifyServices";
 import { useState } from "react"
 import { ToastContainer } from "react-toastify";
 import { AUTH_ENDPOINTS } from "@/lib/apiEndpoints";
+import { setToken } from "@/lib/auth";
 
 export default function RegisterForm() {
   const [ formData, setFormData ] = useState({
@@ -34,7 +35,6 @@ export default function RegisterForm() {
         credentials: 'omit',
       });
 
-      console.log(response)
 
       if (!response.ok) {
         console.log(response);
@@ -45,6 +45,7 @@ export default function RegisterForm() {
       const data = await response.json();
       console.log('Register successful');
 
+      setToken();
       window.location.href = '/posts';
     } catch (error) {
       notifyService.showError(error.message || 'An unexpected error occurred');

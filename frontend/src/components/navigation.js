@@ -4,19 +4,24 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-import { ArrowRight, User } from "lucide-react";
+import { ArrowRight, User, Settings, LogOut } from "lucide-react";
 import { ModeToggle } from "./NodeToggle";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import ThemeAwareImage from "./ThemeAwareImage";
 import { isAuthenticated, removeToken } from "@/lib/auth";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import ProjectModal from "./ProjectModal";
 
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [ authenticated, setAuthenticated ] = useState(false);
   const router = useRouter();
+  const [ isModalOpen, setIsModalOpen ] = useState(false);
+
+  const handlePostSubmit = (data) => {
+    console.log(data);
+  }
 
   useEffect(() => {
     setAuthenticated(isAuthenticated());
@@ -39,6 +44,7 @@ export default function Navigation() {
   const logout = () => {
     removeToken();
     router.push('/');
+    location.reload();
   }
 
   return (
@@ -60,25 +66,31 @@ export default function Navigation() {
           </div>
           <nav className="flex space-x-6 items-center mt-3">
             {authenticated ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 border-2 border-white dark:border-gray-700 focus:outline-none">
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/settings')}>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Settings</span>
+              <div className="flex flex-row space-x-6">
+                <Button variant="primary" onClick={() => setIsModalOpen(true)}  className="pointer-cursor text-gray-900 dark:text-gray-300 transition-colors flex bg-green-500 items-center space-x-2 border-1 rounded-md py-2 px-3">Create Post</Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="primary" className="p-0 overflow-hidden h-10 w-10 rounded-full">
+                      <img
+                        src="/cat.png"
+                        alt="User Profile"
+                        className="h-full w-full object-cover"
+                      />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      Profile
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="cursor-pointer text-red-500 focus:text-red-500" onClick={logout}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Logout</span>
+                    <DropdownMenuItem>
+                      Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={logout}>
+                      Logout
                     </DropdownMenuItem>
                   </DropdownMenuContent>
-              </DropdownMenu>
+                </DropdownMenu>
+              </div>
             ) : (
               <Button onClick={() => router.push('/login')} variant="outline" className="text-gray-900 dark:text-gray-300 transition-colors flex flex-row items-center space-x-2 border-1 rounded-md py-2 px-3" >
                 <span>Sign In!</span>
@@ -89,6 +101,11 @@ export default function Navigation() {
           </nav>
         </div>
       </div>
+      <ProjectModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handlePostSubmit}
+      />
     </motion.header>
   );
 }
