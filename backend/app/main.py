@@ -1,15 +1,11 @@
 from flask import Flask, jsonify
-from models import db
-from models import Post, User, Comment, Project
-from routes.user_routes import user_routes
-from flask_sqlalchemy import SQLAlchemy
+from model import db
 from flask_cors import CORS
 import requests
 import os
 
 app = Flask(__name__)
-#register blueprint
-app.register_blueprint(user_routes)
+
 # sqlite database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # 数据库路径
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,11 +18,13 @@ CORS(app)
 API_URL = os.environ.get("API_URL", "http://localhost:5000")
 CLIENT_URL = os.environ.get("CLIENT_URL", "http://localhost:3000")
 
-@app.route("/")
+
+@app.route("/solve")
 def read_root():
     return jsonify({
         "message": "Hello World"
     })
+
 
 @app.route("/env-check")
 def check_environment():
@@ -35,10 +33,20 @@ def check_environment():
         "client_url": CLIENT_URL
     })
 
-# create tables
-@app.before_first_request
+
+created = False  # Flag to check if tables have been created
+
+
+# create tables only once on app startup
+@app.before_request
 def create_tables():
-    db.create_all()
+    global created
+    if not created:
+        db.create_all()
+        created = True
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
+
+exported_app = app

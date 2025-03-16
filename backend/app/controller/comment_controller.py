@@ -1,24 +1,71 @@
-from flask import request, jsonify
-from ..service import (get_comments_c, add_comment_c, update_comment_c, delete_comment_c)
+from flask import jsonify, request
+from ..service import CommentService
 
-def get_comments(post_id):
-    comments = get_comments_c(post_id)
-    return jsonify(comments), 200
 
-def add_comment():
-    data = request.get_json()
-    if not data or "content" not in data or "post_id" not in data or "user_id" not in data:
-        return jsonify({"message": "Missing required fields"}), 400
-    response = add_comment_c(data)
-    return jsonify(response), 201
+class CommentController:
 
-def update_comment(comment_id):
-    data = request.get_json()
-    if not data or "content" not in data:
-        return jsonify({"message": "Missing content field"}), 400
-    response = update_comment_c(comment_id, data)
-    return jsonify(response), 200
+    """ get comments
+    Args:
+        post_id -int -on url path
+    Returns:
+        comments -see util/schema/comment_schema
+    """
+    @staticmethod
+    def get_comments(post_id):
+        try:
+            comments, user_dict = CommentService.get_comments_s(post_id)
+            return jsonify(comments), 200
+        except Exception as e:
+            return jsonify({"message": str(e)}), 500
 
-def delete_comment(comment_id):
-    response = delete_comment_c(comment_id)
-    return jsonify(response), 200
+    """ add comment
+    Args:
+        post_id -int -on url path
+        user_id -int -on url path
+    Returns: 
+        comments -formatted JSON see util/schema/comment_schema
+    """
+    @staticmethod
+    def add_comment(post_id, user_id):
+        try:
+            data = request.get_json()
+            content = data.get("content")
+            new_comment = CommentService.add_comment_s(post_id, user_id, content)
+            return jsonify(new_comment), 201
+        except ValueError as e:
+            return jsonify({"message": str(e)}), 400
+        except Exception as e:
+            return jsonify({"message": "Internal server error"}), 500
+
+    """ update comment
+    Args:
+        comment_id -int -on url path
+    Returns:
+        comments -formatted JSON see util/schema/comment_schema
+    """
+    @staticmethod
+    def update_comment(comment_id):
+        try:
+            data = request.get_json()
+            updated_comment = CommentService.update_comment_s(comment_id, data)
+            return jsonify(updated_comment), 200
+        except ValueError as e:
+            return jsonify({"message": str(e)}), 404
+        except Exception as e:
+            return jsonify({"message": "Internal server error"}), 500
+
+    """ delete comment
+    Args:
+        comment_id -int -on url path
+    Returns:
+        comment_id -int
+    """
+    @staticmethod
+    def delete_comment(comment_id):
+        try:
+            deleted_comment_id = CommentService.delete_comment_s(comment_id)
+            return jsonify(deleted_comment_id), 200
+        except ValueError as e:
+            return jsonify({"message": str(e)}), 404
+        except Exception as e:
+            return jsonify({"message": "Internal server error"}), 500

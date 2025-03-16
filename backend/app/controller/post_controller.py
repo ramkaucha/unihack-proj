@@ -1,50 +1,141 @@
 from flask import jsonify, request
-from ..service import (
-    get_posts_s, get_posts_sorted_by_popularity_s, get_post_s,
-    create_post_s, update_post_s, delete_post_s, archive_post_s,
-    toggle_item_s
-)
+from ..service import PostService
 
 
-def get_posts():
-    return jsonify(get_posts_s())
+class PostController:
+    """ get all posts
+    Returns:
+         posts -see util/schema/post_schema
+    """
+    @staticmethod
+    def get_posts():
+        return jsonify(PostService.get_posts_s()), 200
 
+    """ get all posts sorted by popularity
+    Returns:
+        posts -see util/schema/post_schema
+    """
+    @staticmethod
+    def get_posts_sorted_by_popularity():
+        return jsonify(PostService.get_posts_sorted_by_popularity_s()), 200
 
-def get_posts_sorted_by_popularity():
-    return jsonify(get_posts_sorted_by_popularity_s())
+    """ get post by id
+    Returns:
+        post -see util/schema/post_schema
+    """
+    # get post by id
+    @staticmethod
+    def get_post(post_id):
+        return jsonify(PostService.get_post_s(post_id)), 200
 
+    """ create post
+    Args: 
+        user_id -int -from url path
+    Expectation:
+        {
+            "title": "string",
+            "description": "string"
+        }
+    Returns: post -see util/schema/post_schema
+    """
+    @staticmethod
+    def create_post(user_id):
+        data = request.get_json()
+        if (not data
+                or not data.get("title")
+                or not data.get("description")):
+            return jsonify({"message": "Missing required fields"}), 400
+        title = data.get("title")
+        description = data.get("description")
+        return jsonify(PostService.create_post_s(user_id, title, description)), 201
 
-def get_post(post_id):
-    return jsonify(get_post_s(post_id))
+    """ update post
+    Args:
+        post_id -int -from url path
+    Expectation: 
+        {
+            "title": "string",
+            "description": "string"
+        }
+    Returns: 
+        post -see util/schema/post_schema
+    """
+    @staticmethod
+    def update_post(post_id):
+        data = request.get_json()
+        if (not data
+                or not data.get("title")
+                or not data.get("description")):
+            return jsonify({"message": "Missing required fields"}), 400
+        title = data.get("title")
+        description = data.get("description")
+        return jsonify(PostService.update_post_s(post_id, title, description)), 200
 
+    """ archive post
+    Args: 
+        post_id -int -from url path
+    Returns: 
+        post_id -int
+    """
+    @staticmethod
+    def archive_post(post_id):
+        return jsonify(PostService.archive_post_s(post_id)), 200
 
-def create_post():
-    data = request.get_json()
-    return jsonify(create_post_s(data)), 200
+    """ delete post
+    Args:
+        post_id -int -from url path
+    Returns:
+        post_id -int
+    """
+    @staticmethod
+    def delete_post(post_id):
+        return jsonify(PostService.delete_post_s(post_id)), 200
 
+    """ when it the button, like the post if not liked, unlike if liked
+    Args:
+        post_id -int -from url path
+        user_id -int -from request body
+    """
+    @staticmethod
+    def toggle_like(post_id, user_id):
+        return jsonify(PostService.toggle_item_s(post_id, "like", user_id)), 200
 
-def update_post(post_id):
-    data = request.get_json()
-    return jsonify(update_post_s(post_id, data)), 200
+    """ when it the button, join the post if not joined, join if joined
+    Args:
+        post_id -int -from url path
+        user_id -int -from request body
+    """
+    @staticmethod
+    def toggle_join(post_id, user_id):
+        return jsonify(PostService.toggle_item_s(post_id, "join", user_id)), 200
 
+    """ get list of users who likes the post
+    Args:
+        post_id -int -from url path
+        users -see util/schema/user_schema
+    """
+    # get list of users who likes
+    @staticmethod
+    def get_likes(post_id):
+        likes = PostService.get_likes_s(post_id)
+        return jsonify(likes), 200
 
-def archive_post(post_id):
-    return jsonify(archive_post_s(post_id)), 200
+    """ get list of users who wanna join the post
+    Args:
+        post_id -int -from url path
+        users -see util/schema/user_schema
+    """
+    @staticmethod
+    def get_joins(post_id):
+        joins = PostService.get_join_s(post_id)
+        return jsonify(joins), 200
 
-
-def delete_post(post_id):
-    return jsonify(delete_post_s(post_id)), 200
-
-
-def toggle_like(post_id):
-    user_id = request.json.get('user_id')
-    if not user_id:
-        return jsonify({"message": "user_id is required"}), 400
-    return jsonify(toggle_item_s(post_id, "like", user_id)), 200
-
-
-def toggle_join(post_id):
-    user_id = request.json.get('user_id')
-    if not user_id:
-        return jsonify({"message": "user_id is required"}), 400
-    return jsonify(toggle_item_s(post_id, "join", user_id)), 200
+    """ get list of users who wanna join in shuffle order
+    Args:
+        post_id -int -from url path
+        users -see util/schema/user_schema
+    """
+    @staticmethod
+    def get_join_shuffle(post_id):
+        join_shuffle = PostService.get_join_shuffle(post_id)
+        return jsonify(join_shuffle), 200
