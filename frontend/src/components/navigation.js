@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+
 import { ArrowRight, User } from "lucide-react";
 import { ModeToggle } from "./NodeToggle";
 import { Button } from "./ui/button";
@@ -10,6 +11,7 @@ import { useRouter } from "next/navigation";
 import ThemeAwareImage from "./ThemeAwareImage";
 import { isAuthenticated, removeToken } from "@/lib/auth";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
