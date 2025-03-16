@@ -12,7 +12,7 @@ class PostService:
 
     # get all posts
     @staticmethod
-    def get_posts_s():
+    def get_posts_s(user_id):
         posts = Post.query.filter_by(is_archived=False).all()
         return [SchemaUtil.format_post(post) for post in posts]
 
