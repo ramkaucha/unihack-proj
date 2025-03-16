@@ -14,4 +14,4 @@ class Project(db.Model):
 
     # fk
     post_id = db.Column(db.Integer, db.ForeignKey('posts.post_id'), nullable=False)
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)

@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from model import db, Comment, Post, Project, User
+from model import db
 from flask_cors import CORS
 import requests
 import os
