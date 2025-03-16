@@ -10,14 +10,13 @@ import backend.app.route.user_route as user_route
 
 app = Flask(__name__)
 
-# 注册 Blueprint，并指定 URL 前缀
 app.register_blueprint(comment_route.comment_bp, url_prefix="/comments")
 app.register_blueprint(post_route.post_bp, url_prefix="/posts")
 app.register_blueprint(project_route.project_bp, url_prefix="/projects")
-app.register_blueprint(user_route.user_bp, url_prefix="/users")
+app.register_blueprint(user_route.user_bp)
 
 # sqlite database config
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # 数据库路径
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # init db
@@ -71,8 +70,6 @@ def create_tables():
     if not created:
         db.create_all()
         created = True
-
-app.register_blueprint(user_routes)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
