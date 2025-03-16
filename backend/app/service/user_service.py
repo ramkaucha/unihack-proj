@@ -27,14 +27,16 @@ class UserService:
             return jsonify({"message:": "you must set your user name"})
         if password is None:
             return jsonify({"message:": "you must set your password"})
-        if email in None:
+        if email is None:
             return jsonify({"message:": "you must set your email"})
 
         hash_pw = PassUtil.encrypt_password(password)
-        new_user = User(userName=name, password=hash_pw, email=email, credit=0, isNew=True,
+        new_user = User(user_name=name, password=hash_pw, email=email, credit=0, isNew=True,
                         isDelete=False)
         db.session.add(new_user)
         db.session.commit()
+
+        return jsonify({"message": "User registered successfully"}), 200
 
     def login(userName, password):
         if userName or password is None:

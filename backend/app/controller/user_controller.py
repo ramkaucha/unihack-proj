@@ -6,8 +6,9 @@ from backend.app.service.user_service import UserService
 # data from frontend: "user_id", "user_name", "password", "email", "is_delete"
 
 class user_controller:
-    def register(self, data):
+    def register(data):
         userName = data.get("user_name") if data else None
+        print(userName)
         password = data.get("password") if data else None
         email = data.get("email") if data else None
         return UserService.register(userName, password, email)
