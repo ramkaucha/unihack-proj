@@ -15,6 +15,7 @@ class Post(db.Model):
     # Foreign key to Project
     project_id = db.Column(db.Integer, db.ForeignKey('projects.project_id'), nullable=False)
     project = db.relationship('Project', backref='posts')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
 
     # One-to-many relationship with comments
     comments = db.relationship('Comment', backref='post', lazy=True)

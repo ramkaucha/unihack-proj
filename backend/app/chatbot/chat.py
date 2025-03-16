@@ -19,7 +19,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 # OpenAI API Key
-openai.api_key = OPEN_AI_API
+openai.api_key = OPEN_API
 
 MAX_WARNINGS = 3  # Max warnings before chat termination
 

@@ -14,6 +14,8 @@ export default function LoginForm() {
 
   const handleChange = (e) => {
     let { name, value } = e.target;
+    console.log(name);
+    console.log(value);
     setFormData((prev) => ({
       ...prev,
       [name]: value
@@ -24,22 +26,22 @@ export default function LoginForm() {
     e.preventDefault();
 
     try {
-      const formPayload = new URLSearchParams({
+      const jsonPayload = {
         username: formData.username,
         password: formData.password
-      });
+      }
+
       const response = await fetch(`${AUTH_ENDPOINTS.LOGIN}`, {
         method: 'POST',
         headers: {
-          'Content-type': 'application/x-www-form-urlencoded',
+          'Content-type': 'application/json',
           'Accept': 'application/json'
         },
-        body: formPayload.toString(),
+        body: JSON.stringify(jsonPayload),
         credentials: 'omit',
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
         notifyService.showError("Error while Submitting");
       }
       const data = await response.json();
@@ -48,7 +50,8 @@ export default function LoginForm() {
       setToken(formData.username);
       window.location.href = "/posts"
     } catch (error) {
-      notifyServices.showError(error);
+      console.log(error);
+      notifyService.showError(error);
     }
   }
 
@@ -67,6 +70,7 @@ export default function LoginForm() {
             type='email'
             id='email'
             required
+            name="username"
             placeholder='me@example.com'
             autoComplete='email'
             value={formData.username}
@@ -79,6 +83,7 @@ export default function LoginForm() {
           <input
             type='password'
             id='password'
+            name="password"
             required
             autoComplete='new-password'
             placeholder='***********'

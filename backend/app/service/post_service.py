@@ -1,14 +1,18 @@
-from ..model import db, Post
+# from ..model import db, Post
+from model import db, Post
 from sqlalchemy.sql import func
-from ..util import SchemaUtil
-from ..service import UserService
+from util import SchemaUtil
+# from ..util import SchemaUtil
+# from service import UserService
+
+from service.user_service import UserService
 
 
 class PostService:
 
     # get all posts
     @staticmethod
-    def get_posts_s():
+    def get_posts_s(user_id):
         posts = Post.query.filter_by(is_archived=False).all()
         return [SchemaUtil.format_post(post) for post in posts]
 

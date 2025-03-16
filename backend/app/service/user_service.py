@@ -1,8 +1,11 @@
 from datetime import datetime
 from flask import jsonify
-from backend import properties
-from ..model import db, User
-from ..util import PassUtil
+# from backend import properties
+# import backend.app.properties as properties
+import properties
+from model import db, User
+# from ..model import db, User
+from util import PassUtil
 import jwt
 
 JWT_KEY = properties.jwt_secret_key
