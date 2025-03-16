@@ -24,5 +24,11 @@ SOLVE also helps regular users by providing solutions to their everyday tech pro
 
 ## Screenshots & Concept:
 ![](images/idea.png)
+![](images/1.png)
+![](images/2.png)
+![](images/3.png)
+![](images/4.png)
+![](images/5.png)
+
 
 Join us on this journey where **real problems meet real solutions!**
