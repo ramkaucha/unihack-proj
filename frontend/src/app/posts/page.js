@@ -150,40 +150,42 @@ export default function Posts() {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 p-6 min-h-screen">
+    <div className="flex flex-col md:flex-row gap-6 py-6 px-34 min-h-screen">
       <div className='w-full md:w-3/4 space-y-4'>
         {posts.map((post) => (
-          <div 
-            key={post.title} 
-            className='flex flex-col md:flex-row border-1 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer'
-          >
-            <div className='mr-4 mb-3 md:mb-0'>
-              <img
-                src={post.image}
-                alt='Profile image'
-                className='rounded-lg w-16 h-16 object-cover'
-              />
-            </div>
-            <div className='flex-1'>
-              <h1 className='font-bold text-xl text-gray-800 dark:text-gray-200 mb-2'>{post.title}</h1>
-              <p className='text-md text-gray-600 dark:text-gray-300'>{post.description}</p>
-            </div>
-            <div className='flex justify-center flex-col items-center'>
-              <div className='flex flex-row justify-center items-center space-x-2'>
-                <span>1</span>
-                <Heart className='w-4 h-4'/>
+          <div className='flex flex-col border-b border-t border-l-0 border-r-0 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer'>
+            <div 
+              key={post.title} 
+              className='flex flex-col md:flex-row'
+            >
+              <div className='mr-4 mb-3 md:mb-0'>
+                <img
+                  src={post.image}
+                  alt='Profile image'
+                  className='rounded-lg w-16 h-16 object-cover'
+                />
               </div>
-              <div className='flex flex-row justify-center items-center space-x-2'>
-                <span>10</span>
-                <Users className='w-4 h-4' />
+              <div className='flex-1'>
+                <h1 className='font-bold text-xl text-gray-800 dark:text-gray-200 mb-2'>{post.title}</h1>
+                <p className='text-md text-gray-600 dark:text-gray-300'>{post.description}</p>
               </div>
             </div>
+            <div className='flex justify-left mt-3 flex-row items-center space-x-4'>
+                <div className='flex flex-row justify-center items-center space-x-2'>
+                  <span>1</span>
+                  <Heart className='w-4 h-4'/>
+                </div>
+                <div className='flex flex-row justify-center items-center space-x-2'>
+                  <span>10</span>
+                  <Users className='w-4 h-4' />
+                </div>
+              </div>
           </div>
         ))}
       </div>
       {/* Sidebar */}
       <div className='w-full md:w-1/4'>
-        <div className='rounded-lg shadow-md p-4 sticky top-6'>
+        <div className='rounded-lg shadow-md p-4 top-6'>
           <h1 className='font-bold text-xl text-gray-800 dark:text-gray-100 mb-4 border-b border-gray-200 pb-2'>Top Developers</h1>
           <div className='space-y-2'>
             {posts.map((post) => (
@@ -197,13 +199,11 @@ export default function Posts() {
             ))}
           </div>
         </div>
-        </div>
-        <div className='w-full md:w-1/4'>
         <div className='rounded-lg shadow-md p-4 sticky top-6'>
           <h1 className='font-bold text-xl text-gray-800 dark:text-gray-100 mb-4 border-b border-gray-200 pb-2'>Top Posts</h1>
           <div className='space-y-2'>
             {posts.map((post) => (
-              <a 
+              <a
                 key={post.title}
                 href={`#${post.title}`}
                 className='block p-2 hover:bg-gray-500 rounded transition-colors duration-200 text-gray-700 dark:text-white'
