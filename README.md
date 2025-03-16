@@ -1,4 +1,4 @@
-![](images/logo.png)
+![](images/logo.png | width=100)
 
 # SOLVE (Real Problems, Real Solutions)
 
