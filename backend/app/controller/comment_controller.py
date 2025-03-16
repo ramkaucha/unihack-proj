@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from ..service import CommentService
+from backend.app.service.comment_service import CommentService
 
 
 class CommentController:

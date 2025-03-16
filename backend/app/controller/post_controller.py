@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from ..service import PostService
+from backend.app.service.post_service import PostService
 
 
 class PostController:
