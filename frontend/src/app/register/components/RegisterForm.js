@@ -19,10 +19,9 @@ export default function RegisterForm() {
 
     try {
       const jsonPayload = {
-        username: formData.username,
-        password: formData.password,
+        user_name: formData.username,
         email: formData.email,
-        name: formData.name
+        password: formData.password
       };
 
       const response = await fetch(`${AUTH_ENDPOINTS.REGISTER}`, {
@@ -34,6 +33,8 @@ export default function RegisterForm() {
         body: JSON.stringify(jsonPayload),
         credentials: 'omit',
       });
+
+      console.log(response)
 
       if (!response.ok) {
         console.log(response);
