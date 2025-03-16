@@ -7,6 +7,8 @@ import backend.app.route.comment_route as comment_route
 import backend.app.route.post_route as post_route
 import backend.app.route.project_route as project_route
 import backend.app.route.user_route as user_route
+from backend.app.controller.chatbot_controller import chatbot_bp
+
 
 app = Flask(__name__)
 
@@ -14,6 +16,7 @@ app.register_blueprint(comment_route.comment_bp, url_prefix="/comments")
 app.register_blueprint(post_route.post_bp, url_prefix="/posts")
 app.register_blueprint(project_route.project_bp, url_prefix="/projects")
 app.register_blueprint(user_route.user_bp)
+app.register_blueprint(chatbot_bp)
 
 # sqlite database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
